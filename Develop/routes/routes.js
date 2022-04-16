@@ -31,6 +31,24 @@ router.delete("/api/notes/:id", (req, res) => {
     console.log(`Note id: ${req.params.id} deleted.`)
 });
 
+// pull up notes.hmtl when get started is clicked
+router.get('/notes', (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/notes.html"));
+});
+
+// wildcard route
+router.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/index.html"));
+});
+
+// adds or deletes json objects when a note is added or deleted
+function editDb() {
+    fs.writeFile("db/db.json", JSON.stringify(notes,'\t'), err => {
+        if (err) throw err;
+        return true;
+    });
+};
+
 module.exports = router;
 
 
