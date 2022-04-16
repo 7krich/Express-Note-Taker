@@ -2,12 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const express = require('express');
 
+// require the route.js file
+require('./routes/routes');
+
 // init express application
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// require the route.js file
-require('./routes/routes')(app);
 
 // include css & javascript files when HTML file loads in get send file route below
 app.use(express.static('public'));
@@ -19,4 +20,4 @@ app.use(express.json());
 // route listener
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`);
-})
+});
