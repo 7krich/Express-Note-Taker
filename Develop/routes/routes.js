@@ -5,7 +5,7 @@ const path = require('path');
 // get notes route
 router.get("/api/notes", (req, res) => {
     // return saved notes in db.json file
-    res.json(notes);
+    //res.json(notes);
 });
 
 // post notes route

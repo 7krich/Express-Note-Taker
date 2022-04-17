@@ -1,9 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
-
-// require the route.js file
-require('./routes/routes');
+const htmlRoutes = require('./routes/routes');
 
 // init express application
 const app = express();
@@ -16,6 +14,12 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
 app.use(express.json());
+
+// require the route.js file
+require('./routes/routes');
+
+// if / is the endpoint router weill serve back HTML routes
+app.use('/', htmlRoutes);
 
 // route listener
 app.listen(PORT, () => {
