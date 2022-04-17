@@ -14,10 +14,12 @@ router.get("/api/notes", (req, res) => {
 router.post("/api/notes", (req, res) => {
     // new note = note input body
     let newNotes = req.body;
-    // push new note to body
+
+    // check if there is an array, if not, create one
     if (!Array.isArray(notes)) {
         notes =[];
     }
+    // then push the new notes to the array
     notes.push(newNotes);
     // call add to db function to add new notes to db.json
     editDb();
@@ -49,6 +51,7 @@ router.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 
+// Functionality
 // adds or deletes json objects when a note is added or deleted
 function editDb() {
     fs.writeFile("db/db.json", JSON.stringify(notes,'\t'), err => {
