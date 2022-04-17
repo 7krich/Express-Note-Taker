@@ -1,21 +1,27 @@
 const router = require('express').Router();
 const fs = require('fs');
 const path = require('path');
+let { notes } = require('../db/db.json');
 
-// get notes route
+// get notes api route
 router.get("/api/notes", (req, res) => {
     // return saved notes in db.json file
-    //res.json(notes);
+    res.json(notes);
 });
 
-// post notes route
+// API Routes
+// post notes api route
 router.post("/api/notes", (req, res) => {
     // new note = note input body
     let newNotes = req.body;
+    // push new note to body
+    if (!Array.isArray(notes)) {
+        notes =[];
+    }
     notes.push(newNotes);
     // call add to db function to add new notes to db.json
     editDb();
-    return console.info(`Added new note: ${newNotes.title}`);
+    return console.log(`Added new note: ${newNotes.title}`);
 });
 
 // get note by ID
@@ -31,6 +37,8 @@ router.delete("/api/notes/:id", (req, res) => {
     console.log(`Note id: ${req.params.id} deleted.`)
 });
 
+
+// HTML Routes
 // pull up notes.hmtl when get started is clicked
 router.get('/notes', (req, res) => {
     res.sendFile(path.join(__dirname, "../public/notes.html"));
