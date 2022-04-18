@@ -14,10 +14,12 @@ router.get("/api/notes", (req, res) => {
 router.post("/api/notes", (req, res) => {
     // new note = note input body
     let newNotes = req.body;
+    // create variable to store db.json data stored as json object
     let noteList = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+    // create variable to store most recently added note on the list into a string
     let notelength = (noteList.length).toString();
 
-    // add ID to new notes in the list
+    // add ID to the most recent note
     newNotes.id = notelength;
 
     // add updated note to db.json file
@@ -41,7 +43,20 @@ router.get("/api/notes/:id", (req, res) => {
 
 // Delete notes by ID
 router.delete("/api/notes/:id", (req, res) => {
-    notes.splice(req.params.id, 1);
+    // grab the current notes listed in db.json and store as currentNotesList variable
+    let currentNotesList = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+    //convert note id's into string
+    let note = (req.params.id).toString();
+
+    // filter current notes list by the selected id when the trash button is clicked
+    newNoteList = currentNotesList.filter(selected => {
+        // return all the notes except the selected one to delete it
+        return selected.id != note;
+    });
+
+    // return the re-written notes list after removing the selected (deleted) ID
+    res.json(currentNotesList)
+
     console.log(`Note id: ${req.params.id} deleted.`)
 });
 
