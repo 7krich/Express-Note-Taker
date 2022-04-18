@@ -54,8 +54,10 @@ router.delete("/api/notes/:id", (req, res) => {
         return selected.id != note;
     });
 
-    // return the re-written notes list after removing the selected (deleted) ID
-    res.json(currentNotesList)
+    // add writeFile to re-write db.json
+    fs.writeFileSync("./db/db.json", JSON.stringify(newNoteList));
+    // repond to user delete request with note list
+    res.json(currentNotesList);
 
     console.log(`Note id: ${req.params.id} deleted.`)
 });
