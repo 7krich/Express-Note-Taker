@@ -17,10 +17,10 @@ router.post("/api/notes", (req, res) => {
     // create variable to store db.json data stored as json object
     let noteList = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
     // create variable to store most recently added note on the list into a string
-    let notelength = (noteList.length).toString();
+    let noteLength = (noteList.length).toString();
 
     // add ID to the most recent note
-    newNotes.id = notelength;
+    newNotes.id = noteLength;
 
     // add updated note to db.json file
     fs.writeFileSync("./db/db.json", JSON.stringify(noteList));
@@ -32,6 +32,7 @@ router.post("/api/notes", (req, res) => {
     }
     // then push the new notes to the array
     notes.push(newNotes);
+    editDb();
     return console.log(`Added new note: ${newNotes.title}`);
 });
 
@@ -49,19 +50,17 @@ router.delete("/api/notes/:id", (req, res) => {
     let note = (req.params.id).toString();
 
     // filter current notes list by the selected id when the trash button is clicked
-    newNoteList = currentNotesList.filter(selected => {
+    currentNotesList = currentNotesList.filter(selected => {
         // return all the notes except the selected one to delete it
         return selected.id != note;
     });
 
     // add writeFile to re-write db.json
-    fs.writeFileSync("./db/db.json", JSON.stringify(newNoteList));
+    fs.writeFileSync("./db/db.json", JSON.stringify(currentNotesList));
     // repond to user delete request with note list
     res.json(currentNotesList);
-
     console.log(`Note id: ${req.params.id} deleted.`)
 });
-
 
 // HTML Routes
 // pull up notes.hmtl when get started is clicked
@@ -73,6 +72,15 @@ router.get('/notes', (req, res) => {
 router.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, "../public/index.html"));
 });
+
+// Functionality
+// adds or deletes json objects when a note is added or deleted
+function editDb() {
+    fs.writeFile("db/db.json", JSON.stringify(notes,'\t'), err => {
+        if (err) throw err;
+        return true;
+    });
+};
 
 module.exports = router;
 
